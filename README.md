@@ -15,7 +15,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Visit http://127.0.0.1:8000/ and http://127.0.0.1:8000/admin/.
+Visit http://127.0.0.1:8001/ and http://127.0.0.1:8001/admin/.
 
 Register a seller, then approve the SellerProfile in admin and enable accepts_custom_orders. Register a buyer separately to test cart, checkout and requests.
 
