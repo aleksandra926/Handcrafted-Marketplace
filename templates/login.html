@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block title %}Log In · Handcrafted Marketplace{% endblock %}{% block content %}<div class="auth-layout">{% include 'partials/auth_art.html' %}<div class="auth-form">
+<span class="eyebrow">Your handmade community</span>
+<h1>Welcome back.</h1>
+<p>Log in to discover your next handmade story.</p>
+<form method="post">{% csrf_token %}{% include 'partials/form_fields.html' %}<input type="hidden" name="next" value="{{ next }}">
+<button class="btn btn-brand">Log In →</button>
+</form>
+<div class="auth-switch">New to the marketplace? <a class="text-link" href="{% url 'register' %}">Create an account</a>
+</div>
+</div>
+</div>{% endblock %}

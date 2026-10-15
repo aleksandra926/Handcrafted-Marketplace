@@ -1,0 +1,7 @@
+{% load static %}<a class="category-card" href="{% url 'catalog' %}?category={{ category.slug }}">
+<div>
+<img src="{% if category.preview %}{{ category.preview.image.url }}{% else %}{% static 'images/placeholder.svg' %}{% endif %}" alt="" loading="lazy">
+</div>
+<h3>{{ category.name }} <span>↗</span>
+</h3>
+</a>

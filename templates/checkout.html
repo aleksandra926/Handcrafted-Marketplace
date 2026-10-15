@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block title %}Checkout · Handcrafted Marketplace{% endblock %}{% block content %}<div class="breadcrumb-trail">
+<a href="{% url 'cart' %}">Your Cart</a> / Checkout</div>
+<h1 class="mb-4">A little closer to handmade.</h1>{% if items %}<div class="checkout-layout">
+<form class="shipping-form" method="post">{% csrf_token %}<h2>Shipping Information</h2>
+<p class="small">Demo checkout — no payment will be processed.</p>{% include 'partials/form_fields.html' %}<button class="btn btn-brand w-100">Place Order →</button>
+</form>{% include 'partials/order_summary.html' with show_items=True %}</div>{% else %}<div class="empty-state">
+<h2>Your cart is empty.</h2>
+<p>Add a handmade find before checking out.</p>
+<a class="btn btn-brand" href="{% url 'catalog' %}">Explore Products</a>
+</div>{% endif %}{% endblock %}

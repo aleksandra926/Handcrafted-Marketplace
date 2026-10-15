@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% block title %}Custom Requests · Handcrafted Marketplace{% endblock %}{% block content %}{% if seller_view %}<div class="dashboard-layout">{% include 'partials/seller_sidebar.html' %}<div>{% endif %}<header class="page-banner">
+<span class="eyebrow">Ideas made personal</span>
+<h1>{% if seller_view %}Incoming Custom Requests{% else %}My Custom Requests{% endif %}</h1>
+<p>A request starts a conversation. Acceptance and a proposed price do not confirm a purchase.</p>
+</header>{% for r in requests %}<article class="request-card">
+<div class="request-heading">
+<h2>{{ r.product_type }}</h2>{% include 'partials/status.html' with status=r.status label=r.get_status_display %}</div>
+<p class="small mt-2">#{{ r.pk }} · {{ r.created_at|date:'j M Y' }} · {% if seller_view %}From {{ r.buyer.username }}{% else %}<a href="{% url 'shop' r.seller.pk %}">{{ r.seller.shop_name }}</a>{% endif %}</p>{{ r.description|linebreaks }}<dl class="request-details">
+<div>
+<dt>Preferred colors</dt>
+<dd>{{ r.color_preferences|default:'Not specified' }}</dd>
+</div>
+<div>
+<dt>Size / Dimensions</dt>
+<dd>{{ r.dimensions|default:'Not specified' }}</dd>
+</div>
+<div>
+<dt>Specific details</dt>
+<dd>{{ r.specific_details|default:'Not specified' }}</dd>
+</div>
+</dl>{% if r.reference_image %}<a href="{{ r.reference_image.url }}">
+<img class="reference-image" src="{{ r.reference_image.url }}" alt="Reference for {{ r.product_type }}">
+</a>{% endif %}<div class="request-heading">
+<span class="small">Proposed price: {% if r.proposed_price %}<strong>{{ r.proposed_price }} MKD</strong>{% else %}Awaiting a quote{% endif %}</span>{% if seller_view and r.seller.custom_orders_enabled %}<a class="btn btn-brand btn-sm" href="{% url 'request_manage' r.pk %}">Manage Request →</a>{% endif %}</div>
+</article>{% empty %}<div class="empty-state">
+<h2>No requests yet.</h2>
+<p>{% if seller_view %}Custom requests from buyers will appear here when your shop is approved and custom orders are enabled.{% else %}Discover a maker accepting custom orders and share your idea.{% endif %}</p>{% if not seller_view %}<a class="btn btn-brand" href="{% url 'makers' %}">Meet Our Makers</a>{% endif %}</div>{% endfor %}{% if seller_view %}</div>
+</div>{% endif %}{% endblock %}

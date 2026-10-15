@@ -1,0 +1,34 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Your Cart · Handcrafted Marketplace{% endblock %}{% block content %}<div class="breadcrumb-trail">
+<a href="{% url 'home' %}">Home</a> / Your Cart</div>
+<div class="section-heading">
+<div>
+<span class="eyebrow">Your thoughtfully chosen finds</span>
+<h1>Your Cart</h1>
+</div>
+</div>{% if items %}<div class="cart-layout">
+<section aria-label="Cart items">{% for i in items %}<article class="cart-item">{% with img=i.product.images.first %}<img src="{% if img %}{{ img.image.url }}{% else %}{% static 'images/placeholder.svg' %}{% endif %}" alt="{{ i.product.name }}">{% endwith %}<div>
+<h2>
+<a href="{% url 'product_detail' i.product.pk %}">{{ i.product.name }}</a>
+</h2>
+<p>
+<a href="{% url 'shop' i.product.seller.pk %}">{{ i.product.seller.shop_name }}</a> · {{ i.product.price }} MKD each</p>
+<div class="cart-item-bottom">
+<form class="quantity-form" method="post" action="{% url 'cart_update' i.pk %}">{% csrf_token %}<div class="quantity-control">
+<button type="button" data-step="-1" aria-label="Decrease {{ i.product.name }} quantity">−</button>
+<input type="number" name="quantity" min="1" max="{{ i.product.stock }}" value="{{ i.quantity }}" aria-label="Quantity for {{ i.product.name }}">
+<button type="button" data-step="1" aria-label="Increase {{ i.product.name }} quantity">+</button>
+</div>
+<button class="btn btn-outline-secondary btn-sm">Update</button>
+</form>
+<strong>{{ i.subtotal }} MKD</strong>
+</div>
+<form method="post" action="{% url 'cart_update' i.pk %}">{% csrf_token %}<input type="hidden" name="quantity" value="0">
+<button class="remove-button">Remove item</button>
+</form>
+</div>
+</article>{% endfor %}<a class="text-link d-inline-block mt-4" href="{% url 'catalog' %}">← Continue shopping</a>
+</section>{% include 'partials/order_summary.html' with checkout_button=True %}</div>{% else %}<div class="empty-state">
+<h2>Your next handmade story awaits.</h2>
+<p>Your cart is empty. Discover something beautifully made.</p>
+<a class="btn btn-brand" href="{% url 'catalog' %}">Explore Products →</a>
+</div>{% endif %}{% endblock %}

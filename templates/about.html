@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block title %}Our Story · Handcrafted Marketplace{% endblock %}{% block content %}<header class="page-banner">
+<span class="eyebrow">Small makers. Big stories.</span>
+<h1>A marketplace with a human touch.</h1>{% include 'partials/botanical.html' %}</header>
+<article class="prose-panel">
+<h2>Beautiful things begin with care.</h2>
+<p>Handcrafted Marketplace brings independent makers and thoughtful shoppers together. From crochet creations and candles to jewelry, home details, and personalized gifts, every shop has its own story.</p>
+<h2>Meet the person behind the product.</h2>
+<p>Explore a maker's public shop, read their story, and discover their creations. Each business keeps its own identity within our shared marketplace.</p>
+<h2>Something personal, made for you.</h2>
+<p>Approved makers who accept custom orders can receive your ideas, preferences, and reference images. A custom request gives you a place to start; an accepted request does not confirm a purchase.</p>
+<a class="btn btn-brand" href="{% url 'makers' %}">Meet Our Makers →</a>
+</article>{% endblock %}

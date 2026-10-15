@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% block title %}{{ heading }} · Handcrafted Marketplace{% endblock %}{% block content %}<div class="breadcrumb-trail">{% if user.role == 'SELLER' %}<a href="{% url 'dashboard' %}">Seller Dashboard</a>{% else %}<a href="{% url 'my_requests' %}">Custom Requests</a>{% endif %} / {{ heading }}</div>
+<div class="form-panel">
+<span class="eyebrow">Every detail matters</span>
+<h1>{{ heading }}</h1>{% if multi_images %}<p>Tell the story of your creation. Add clear photographs and accurate availability.</p>{% elif custom_order %}<p>Accepting a request or proposing a price does not confirm a purchase.</p>
+<section class="detail-section mb-4">
+<h2>{{ custom_order.product_type }}</h2>
+<p>Requested by {{ custom_order.buyer.username }} on {{ custom_order.created_at|date:'j M Y' }}</p>
+<dl class="request-details">
+<div>
+<dt>Preferred colors</dt>
+<dd>{{ custom_order.color_preferences|default:'Not specified' }}</dd>
+</div>
+<div>
+<dt>Dimensions</dt>
+<dd>{{ custom_order.dimensions|default:'Not specified' }}</dd>
+</div>
+<div>
+<dt>Specific details</dt>
+<dd>{{ custom_order.specific_details|default:'Not specified' }}</dd>
+</div>
+</dl>{{ custom_order.description|linebreaks }}{% if custom_order.reference_image %}<a href="{{ custom_order.reference_image.url }}">
+<img class="reference-image" src="{{ custom_order.reference_image.url }}" alt="Buyer reference image">
+</a>{% endif %}</section>{% elif form.reference_image %}<p>Have something special in mind? Share your idea with the maker. This is a request, not a confirmed purchase.</p>{% endif %}<form method="post" enctype="multipart/form-data">{% csrf_token %}{% include 'partials/form_fields.html' %}{% if multi_images %}<div class="upload-area">
+<label for="product-images">Product photographs</label>
+<input id="product-images" type="file" name="images" accept="image/*" multiple>
+<p class="small mb-0 mt-2">Upload one or more images. Choose clear, well-lit photographs.</p>
+</div>{% endif %}<button class="btn btn-brand">{% if form.reference_image %}Submit Request{% elif custom_order %}Update Request{% elif multi_images %}Save Product{% else %}Save Changes{% endif %} →</button>
+</form>{% if product %}<div class="image-management">{% for img in product.images.all %}<div>
+<img src="{{ img.image.url }}" alt="{{ product.name }}, photograph {{ forloop.counter }}">
+<form method="post" action="{% url 'image_delete' img.pk %}" data-confirm="Remove this photograph?">{% csrf_token %}<button class="btn btn-outline-danger btn-sm">Remove image</button>
+</form>
+</div>{% endfor %}</div>{% endif %}</div>{% endblock %}

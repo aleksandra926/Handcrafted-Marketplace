@@ -1,0 +1,25 @@
+{% extends 'base.html' %}{% block title %}For Sellers · Handcrafted Marketplace{% endblock %}{% block content %}<header class="page-banner">
+<span class="eyebrow">Make room for your handmade story</span>
+<h1>Your craft. Your shop. Our community.</h1>
+<p>Bring your creations to a marketplace made for independent artisans.</p>{% include 'partials/botanical.html' %}</header>
+<article class="prose-panel">
+<h2>A home for what you make.</h2>
+<p>Create your own shop profile, share your photographs, and manage your products, stock, and incoming orders in one place.</p>
+<div class="steps">
+<div>
+<span class="step-number">01</span>
+<h3>Create your account</h3>
+<p>Choose the Seller role and give your shop its own name.</p>
+</div>
+<div>
+<span class="step-number">02</span>
+<h3>Tell your story</h3>
+<p>Add your shop logo, description, and product photographs.</p>
+</div>
+<div>
+<span class="step-number">03</span>
+<h3>Share your creations</h3>
+<p>Manage listings and orders through your seller dashboard.</p>
+</div>
+</div>
+<p class="small">Custom-order requests are available only after administrator approval and activation for your shop. Checkout currently runs as a demo without online payments.</p>{% if user.role == 'SELLER' %}<a class="btn btn-brand" href="{% url 'dashboard' %}">Open Your Dashboard →</a>{% elif not user.is_authenticated %}<a class="btn btn-brand" href="{% url 'register' %}">Join as a Seller →</a>{% else %}<p>Your current account is registered as a buyer. To open a shop, register a separate seller account.</p>{% endif %}</article>{% endblock %}

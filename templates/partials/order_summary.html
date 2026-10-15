@@ -1,0 +1,17 @@
+{% load static %}<aside class="summary-panel">
+<h2>Order Summary</h2>{% if show_items %}{% for i in items %}<div class="summary-item">{% with img=i.product.images.first %}<img src="{% if img %}{{ img.image.url }}{% else %}{% static 'images/placeholder.svg' %}{% endif %}" alt="">{% endwith %}<div>{{ i.product.name }}<small>{{ i.quantity }} × {{ i.product.price }} MKD</small>
+</div>
+<strong>{{ i.subtotal }} MKD</strong>
+</div>{% endfor %}{% endif %}<div class="summary-line">
+<span>Subtotal</span>
+<span>{{ total }} MKD</span>
+</div>
+<div class="summary-line">
+<span>Shipping</span>
+<span>No charge in demo</span>
+</div>
+<div class="summary-line summary-total">
+<span>Total</span>
+<strong>{{ total }} MKD</strong>
+</div>{% if checkout_button %}<a class="btn btn-brand w-100" href="{% url 'checkout' %}">Proceed to Checkout →</a>{% endif %}<p class="small mt-3 mb-0">Demo checkout. No online payment is collected.</p>
+</aside>

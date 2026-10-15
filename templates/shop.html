@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block title %}{{ seller.shop_name }} · Handcrafted Marketplace{% endblock %}{% block content %}<div class="breadcrumb-trail">
+<a href="{% url 'makers' %}">Our Makers</a> / {{ seller.shop_name }}</div>
+<div class="shop-cover">{% include 'partials/botanical.html' %}</div>
+<header class="shop-header">
+<div class="seller-avatar">{% if seller.profile_image %}<img src="{{ seller.profile_image.url }}" alt="{{ seller.shop_name }} logo">{% else %}<span>{{ seller.shop_name|first }}</span>{% endif %}</div>
+<div>
+<span class="eyebrow">Independent maker</span>
+<h1>{{ seller.shop_name }}</h1>
+<p>{{ seller.description|default:'Handmade creations with a story of their own.'|linebreaksbr }}</p>
+<p class="small">Making here since {{ seller.created_at|date:'Y' }}</p>
+</div>{% if seller.custom_orders_enabled %}{% if user.role == 'BUYER' %}<a class="btn btn-brand" href="{% url 'custom_request' seller.pk %}">Request Custom Order →</a>{% elif not user.is_authenticated %}<a class="btn btn-brand" href="{% url 'login' %}?next={% url 'custom_request' seller.pk %}">Request Custom Order →</a>{% endif %}{% endif %}</header>
+<section class="section">
+<div class="section-heading">
+<h2>Made by {{ seller.shop_name }}</h2>
+<span class="small">{{ products|length }} product{{ products|length|pluralize }}</span>
+</div>{% include '_products.html' %}</section>{% endblock %}

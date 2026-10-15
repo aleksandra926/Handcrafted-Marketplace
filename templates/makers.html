@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Our Makers · Handcrafted Marketplace{% endblock %}{% block content %}<header class="page-banner">
+<span class="eyebrow">The people behind the beautiful things</span>
+<h1>Meet Our Makers</h1>
+<p>Independent shops, individual stories, and a shared love for making.</p>{% include 'partials/botanical.html' %}</header>
+<div class="maker-grid">{% for seller in makers %}{% include 'partials/seller_card.html' %}{% empty %}<div class="empty-state">
+<h2>Your handmade story belongs here.</h2>
+<p>Become one of our marketplace's independent makers.</p>
+<a class="btn btn-brand" href="{% url 'for_sellers' %}">Become a seller</a>
+</div>{% endfor %}</div>{% endblock %}

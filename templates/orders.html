@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{% block title %}My Orders · Handcrafted Marketplace{% endblock %}{% block content %}<header class="page-banner">
+<span class="eyebrow">Your handmade journey</span>
+<h1>My Orders</h1>
+<p>A collection of creations chosen by you.</p>{% include 'partials/botanical.html' %}</header>{% for o in orders %}<article class="history-card">
+<div class="history-heading">
+<h2>Order #{{ o.pk }}</h2>{% include 'partials/status.html' with status=o.status label=o.get_status_display %}<strong>{{ o.total_price }} MKD</strong>
+</div>
+<p class="history-meta">Placed {{ o.created_at|date:'j M Y, H:i' }}</p>{% for i in o.items.all %}<div class="order-product">
+<span>{{ i.product_name }} × {{ i.quantity }}<br>
+<a class="small" href="{% url 'shop' i.seller.pk %}">{{ i.seller.shop_name }}</a>
+</span>
+<span>{{ i.price }} MKD each</span>
+</div>{% endfor %}<details class="mt-3 small">
+<summary>Shipping information</summary>
+<p class="mt-2">{{ o.shipping_address|linebreaksbr }}</p>
+</details>
+</article>{% empty %}<div class="empty-state">
+<h2>Your story is just beginning.</h2>
+<p>You haven't placed an order yet.</p>
+<a class="btn btn-brand" href="{% url 'catalog' %}">Explore Products</a>
+</div>{% endfor %}{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}{% block title %}Shop · Handcrafted Marketplace{% endblock %}{% block content %}
+<header class="page-banner">
+<span class="eyebrow">Something special, made with love</span>
+<h1>{{ selected_category.name|default:'All Handmade Products' }}</h1>
+<p>Find thoughtful details and one-of-a-kind creations from independent makers.</p>{% include 'partials/botanical.html' %}</header>
+<button class="btn btn-outline-secondary d-xl-none mb-3" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">Search & Filters</button>
+<div class="catalog-layout">
+<aside class="filter-panel collapse" id="filters">
+<h2>Find your favourites</h2>
+<form method="get">
+<div class="field">
+<label for="search">Search products</label>
+<input id="search" type="search" name="q" value="{{ selected.q|default:'' }}" placeholder="What are you looking for?">
+</div>
+<div class="field">
+<label for="category">Category</label>
+<select id="category" name="category">
+<option value="">All categories</option>{% for c in categories %}<option value="{{ c.slug }}" {% if selected.category == c.slug %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
+</div>
+<div class="field">
+<label for="subcategory">Subcategory</label>
+<select id="subcategory" name="subcategory">
+<option value="">All subcategories</option>{% for c in categories %}<optgroup label="{{ c.name }}">{% for s in c.subcategories.all %}<option value="{{ s.pk }}" {% if selected.subcategory == s.pk|stringformat:'s' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</optgroup>{% endfor %}</select>
+</div>
+<div class="field">
+<label for="min-price">Minimum price (MKD)</label>
+<input id="min-price" type="number" min="0" step="0.01" name="min_price" value="{{ selected.min_price|default:'' }}">
+</div>
+<div class="field">
+<label for="max-price">Maximum price (MKD)</label>
+<input id="max-price" type="number" min="0" step="0.01" name="max_price" value="{{ selected.max_price|default:'' }}">
+</div>
+<div class="field">
+<label for="availability">Availability</label>
+<select id="availability" name="availability">
+<option value="">All products</option>
+<option value="in_stock" {% if selected.availability == 'in_stock' %}selected{% endif %}>In stock</option>
+</select>
+</div>
+<input type="hidden" name="sort" value="{{ selected.sort|default:'newest' }}">
+<button class="btn btn-brand w-100">Apply filters</button>
+<a class="text-link d-block mt-3 text-center" href="{% url 'catalog' %}">Clear filters</a>
+</form>
+</aside>
+<section class="catalog-results" aria-label="Products">
+<div class="catalog-toolbar">
+<span>{{ page_obj.paginator.count }} product{{ page_obj.paginator.count|pluralize }}</span>
+<form method="get" class="d-flex align-items-center gap-2">{% for key,value in selected.items %}{% if key != 'sort' and key != 'page' %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}<label for="sort">Sort by</label>
+<select id="sort" name="sort" class="form-select" style="width:auto">
+<option value="newest">Newest</option>
+<option value="price_asc" {% if selected.sort == 'price_asc' %}selected{% endif %}>Price: low to high</option>
+<option value="price_desc" {% if selected.sort == 'price_desc' %}selected{% endif %}>Price: high to low</option>
+</select>
+<button class="btn btn-outline-secondary btn-sm">Sort</button>
+</form>
+</div>{% include '_products.html' %}{% include 'partials/pagination.html' %}</section>
+</div>
+{% endblock %}

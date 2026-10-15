@@ -1,0 +1,92 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Seller Dashboard · Handcrafted Marketplace{% endblock %}{% block content %}<div class="dashboard-layout">{% include 'partials/seller_sidebar.html' %}<div>
+<header class="dashboard-title">
+<span class="eyebrow">Your shop, at a glance</span>
+<h1>Welcome, {{ seller.shop_name }}.</h1>
+<p class="small">{% if seller.is_approved %}Approved seller{% else %}Seller approval pending{% endif %} · Custom orders {% if seller.custom_orders_enabled %}enabled{% else %}disabled{% endif %} · <a href="{% url 'shop' seller.pk %}">View public shop ↗</a>
+</p>
+</header>
+<div class="stats-grid">
+<div class="stat-card">
+<strong>{{ products|length }}</strong>
+<span>Total products</span>
+</div>
+<div class="stat-card">
+<strong>{{ order_count }}</strong>
+<span>Incoming orders</span>
+</div>
+<div class="stat-card">
+<strong>{{ pending_count }}</strong>
+<span>Pending orders</span>
+</div>
+<div class="stat-card">
+<strong>{{ request_count }}</strong>
+<span>Pending custom requests</span>
+</div>
+</div>
+<section class="table-panel" id="orders">
+<h2>Incoming Orders</h2>
+<p class="small">Order status is managed by the administrator for orders across multiple shops.</p>
+<div class="table-responsive">
+<table class="table">
+<thead>
+<tr>
+<th>Order / Date</th>
+<th>Buyer</th>
+<th>Product</th>
+<th>Quantity</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>{% for i in order_items %}<tr>
+<td>#{{ i.order_id }}<br>
+<span class="small">{{ i.order.created_at|date:'j M Y' }}</span>
+</td>
+<td>{{ i.order.buyer.get_full_name|default:i.order.buyer.username }}<details>
+<summary>Shipping details</summary>{{ i.order.shipping_address|linebreaksbr }}</details>
+</td>
+<td>{{ i.product_name }}<br>{{ i.price }} MKD each</td>
+<td>{{ i.quantity }}</td>
+<td>{% include 'partials/status.html' with status=i.order.status label=i.order.get_status_display %}</td>
+</tr>{% empty %}<tr>
+<td colspan="5">Your incoming orders will appear here.</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+</section>
+<section class="table-panel" id="products">
+<div class="section-heading">
+<h2>My Products</h2>
+<a class="btn btn-brand btn-sm" href="{% url 'product_new' %}">Add Product +</a>
+</div>
+<div class="table-responsive">
+<table class="table">
+<thead>
+<tr>
+<th>Product</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Availability</th>
+<th>Manage</th>
+</tr>
+</thead>
+<tbody>{% for p in products %}<tr>
+<td>
+<div class="table-product">{% with img=p.images.first %}<img src="{% if img %}{{ img.image.url }}{% else %}{% static 'images/placeholder.svg' %}{% endif %}" alt="">{% endwith %}<span>{{ p.name }}</span>
+</div>
+</td>
+<td>{{ p.price }} MKD</td>
+<td>{{ p.stock }}</td>
+<td>{% if not p.is_active %}{% include 'partials/status.html' with status='cancelled' label='Inactive' %}{% elif p.stock %}{% include 'partials/status.html' with status='in_stock' label='In stock' %}{% else %}{% include 'partials/status.html' with status='pending' label='Sold out' %}{% endif %}</td>
+<td>
+<div class="table-actions">
+<a class="text-link" href="{% url 'product_edit' p.pk %}">Edit</a>{% if p.is_active %}<form method="post" action="{% url 'product_delete' p.pk %}" data-confirm="Remove this product from the catalog? Existing orders will remain.">{% csrf_token %}<button class="btn btn-outline-danger btn-sm">Deactivate</button>
+</form>{% endif %}</div>
+</td>
+</tr>{% empty %}<tr>
+<td colspan="5">Your shop is ready for its first creation.</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>{% endblock %}

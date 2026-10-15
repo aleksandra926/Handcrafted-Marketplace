@@ -1,0 +1,8 @@
+<article class="seller-card">
+<a class="seller-avatar" href="{% url 'shop' seller.pk %}">{% if seller.profile_image %}<img src="{{ seller.profile_image.url }}" alt="{{ seller.shop_name }}" loading="lazy">{% else %}<span>{{ seller.shop_name|first }}</span>{% endif %}</a>
+<h3>
+<a href="{% url 'shop' seller.pk %}">{{ seller.shop_name }}</a>
+</h3>
+<p>{{ seller.description|default:'Independent craftsmanship, made with care.'|truncatewords:20 }}</p>
+<a class="text-link" href="{% url 'shop' seller.pk %}">Discover the shop →</a>
+</article>

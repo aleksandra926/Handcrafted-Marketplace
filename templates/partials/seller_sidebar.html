@@ -1,0 +1,11 @@
+<aside class="seller-sidebar" aria-label="Seller navigation">
+<h2>Your maker space</h2>
+<a href="{% url 'dashboard' %}">Dashboard</a>
+<a href="{% url 'dashboard' %}#products">My Products</a>
+<a href="{% url 'product_new' %}">Add Product</a>
+<a href="{% url 'dashboard' %}#orders">Orders</a>
+<a href="{% url 'seller_requests' %}">Custom Orders</a>
+<a href="{% url 'edit_shop' %}">Shop Profile</a>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Log out</button>
+</form>
+</aside>

@@ -1,0 +1,11 @@
+{% load static %}<article class="product-card">
+<a class="product-image" href="{% url 'product_detail' product.pk %}">{% with img=product.images.first %}<img src="{% if img %}{{ img.image.url }}{% else %}{% static 'images/placeholder.svg' %}{% endif %}" alt="{% if img %}{{ product.name }}{% else %}Photograph coming soon{% endif %}" loading="lazy">{% endwith %}{% if not product.stock %}<span class="image-badge">Sold out</span>{% endif %}</a>
+<div class="product-info">
+<a class="maker-attribution" href="{% url 'shop' product.seller.pk %}">{{ product.seller.shop_name }}</a>
+<h3>
+<a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a>
+</h3>
+<div class="product-price">{{ product.price }} <small>MKD</small>
+</div>{% if product.stock and user.role == 'BUYER' %}<form method="post" action="{% url 'cart_add' product.pk %}">{% csrf_token %}<button class="btn btn-brand btn-sm w-100">Add to Cart</button>
+</form>{% elif product.stock and not user.is_authenticated %}<a class="btn btn-outline-secondary btn-sm w-100" href="{% url 'login' %}?next={% url 'product_detail' product.pk %}">Log in to shop</a>{% else %}<a class="product-more" href="{% url 'product_detail' product.pk %}">View details →</a>{% endif %}</div>
+</article>

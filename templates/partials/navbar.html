@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-xl" aria-label="Main navigation">
+<div class="container">
+<a class="navbar-brand brand" href="{% url 'home' %}">{% include 'partials/brand.html' %}</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Open navigation">
+<span class="navbar-toggler-icon">
+</span>
+</button>
+<div class="collapse navbar-collapse" id="navigation">
+<div class="navbar-nav mx-auto">
+<a class="nav-link" href="{% url 'home' %}">Home</a>
+<a class="nav-link" href="{% url 'catalog' %}">Shop</a>
+<div class="nav-item dropdown">
+<button class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
+<ul class="dropdown-menu">{% for c in nav_categories %}<li>
+<a class="dropdown-item" href="{% url 'catalog' %}?category={{ c.slug }}">{{ c.name }}</a>
+</li>{% empty %}<li>
+<a class="dropdown-item" href="{% url 'catalog' %}">All products</a>
+</li>{% endfor %}</ul>
+</div>
+<a class="nav-link" href="{% url 'makers' %}">Our Makers</a>
+<a class="nav-link" href="{% url 'about' %}">About</a>
+<a class="nav-link" href="{% url 'for_sellers' %}">For Sellers</a>
+</div>
+<div class="nav-tools">
+<a class="icon-link" href="{% url 'catalog' %}#search" aria-label="Search products">{% include 'partials/icon.html' with name='search' %}</a>
+<div class="dropdown">
+<button class="icon-link" data-bs-toggle="dropdown" aria-label="Account menu" aria-expanded="false">{% include 'partials/icon.html' with name='user' %}</button>
+<ul class="dropdown-menu dropdown-menu-end">{% if user.is_authenticated %}<li class="dropdown-header">Hello, {{ user.first_name|default:user.username }}</li>{% if user.role == 'SELLER' %}<li>
+<a class="dropdown-item" href="{% url 'dashboard' %}">Seller dashboard</a>
+</li>
+<li>
+<a class="dropdown-item" href="{% url 'seller_requests' %}">Custom requests</a>
+</li>{% else %}<li>
+<a class="dropdown-item" href="{% url 'orders' %}">My orders</a>
+</li>
+<li>
+<a class="dropdown-item" href="{% url 'my_requests' %}">Custom requests</a>
+</li>{% endif %}<li>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="dropdown-item">Log out</button>
+</form>
+</li>{% else %}<li>
+<a class="dropdown-item" href="{% url 'login' %}">Log in</a>
+</li>
+<li>
+<a class="dropdown-item" href="{% url 'register' %}">Create an account</a>
+</li>{% endif %}</ul>
+</div>{% if user.role != 'SELLER' %}<a class="icon-link cart-link" href="{% url 'cart' %}" aria-label="Shopping cart, {{ cart_count }} items">{% include 'partials/icon.html' with name='bag' %}{% if cart_count %}<span class="cart-count">{{ cart_count }}</span>{% endif %}</a>{% endif %}</div>
+</div>
+</div>
+</nav>
